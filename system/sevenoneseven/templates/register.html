@@ -1,0 +1,119 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Registro - 717 Tienda Online</title>
+</head>
+<body class="register-page">
+    <div class="register-container">
+        <a href='{% url "inicio" %}' class="back-button">
+            <i data-lucide="arrow-left"></i> Volver
+        </a>
+        <div class="text-center">
+            <h2>717</h2>
+            <h3>MI CUENTA</h3>
+        </div>
+        
+        <div class="register-box">
+            <div class="register-nav">
+                <a href='{% url "login" %}'>INICIAR SESIÓN</a>
+                <span class="active">REGISTRATE</span>
+            </div>
+
+            <form id="register-form" class="register-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" id="nombre" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="apellido" placeholder="Apellido" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Email" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Contraseña" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="tel" id="telefono" placeholder="Teléfono" required>
+                    </div>
+                    <div class="form-group gender-group">
+                        <div class="gender-options">
+                            <label class="gender-option">
+                                <input type="radio" name="genero" value="masculino">
+                                <div class="gender-icon male-icon"></div>
+                            </label>
+                            <label class="gender-option">
+                                <input type="radio" name="genero" value="femenino">
+                                <div class="gender-icon female-icon"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="date-input">
+                        <input type="date" id="fechaNacimiento" required>
+                    </div>
+                </div>
+
+                <div class="privacy-notice">
+                    Es posible que las personas que usen nuestro servicio hayan subido tu información de contacto a 717.
+                    <a href='{% url "legal" %}' class="privacy-link">Más información</a>
+                </div>
+
+                <div class="captcha">
+                    <label class="robot-check">
+                        <input type="checkbox" required>
+                        <span>NO SOY UN ROBOT</span>
+                    </label>
+                    <div class="recaptcha-box">
+                        <img src="{% static 'img/recaptcha.png' %}" alt="reCAPTCHA">
+                    </div>
+                </div>
+
+                <button type="submit">Registrarte</button>
+            </form>
+        </div>
+
+        <div class="text-center">
+            <img src="{% static 'img/717logo.png' %}" alt="717 Logo" width="60" height="60" class="bottom-logo">
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = {
+                nombre: document.getElementById('nombre').value,
+                apellido: document.getElementById('apellido').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                telefono: document.getElementById('telefono').value,
+                genero: document.querySelector('input[name="genero"]:checked')?.value,
+                fechaNacimiento: document.getElementById('fechaNacimiento').value
+            };
+            console.log('Registration attempt:', formData);
+            
+            // Simulate registration
+            localStorage.setItem('userRegistered', 'true');
+            window.location.href = '{% url "login" %}';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
+    <title>Mi Perfil - 717</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{% static 'img/717logo.png' %}" alt="717" width="50">
+        </div>
+        <nav>
+            <ul>
+                <li><a href='{% url "inicio" %}'>INICIO</a></li>
+                <li><a href='{% url "productos" %}'>PRODUCTO</a></li>
+                <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
+
+            </ul>
+        </nav>
+        <div class="user-nav">
+            <a href='{% url "login" %}' class="user-icon"><i data-lucide="user"></i></a>
+            <button class="cerrar-sesion">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <main class="account-container">
+        <nav class="account-nav">
+            <a href='{% url "perfil" %}'>Mi Perfil</a>
+            <a href='{% url "pedidos" %}' class="active">Mis Pedidos</a>
+            <a href='{% url "favoritos" %}'>Mis Favoritos</a>
+        </nav>
+
+        <div class="profile-content">
+            <h1>717</h1>
+            <div class="profile-info">
+                <div class="info-group">
+                    <label>Nombre</label>
+                    <p>Juan Pérez</p>
+                </div>
+                <div class="info-group">
+                    <label>Email</label>
+                    <p>juan@example.com</p>
+                </div>
+                <div class="info-group">
+                    <label>Dirección</label>
+                    <p>Calle 123 #45-67</p>
+                </div>
+                <div class="info-group">
+                    <label>Información de facturación</label>
+                    <p>**** **** **** 1234</p>
+                </div>
+                <a href='{% url "editar_perfil" %}' class="edit-button">Editar Perfil</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="../script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
+

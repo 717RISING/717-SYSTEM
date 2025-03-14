@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - 717</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="../static/perfil.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../static/img/717logo.png" alt="717" width="50">
+        </div>
+        <nav>
+            <ul>
+                <li><a href='{% url "inicio" %}'>INICIO</a></li>
+                <li><a href='{% url "productos" %}'>PRODUCTO</a></li>
+                <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
+            </ul>
+        </nav>
+        <div class="user-nav">
+            <a href="#" class="user-icon"><i data-lucide="user"></i></a>
+            <button class="cerrar-sesion">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <main class="account-container">
+        <nav class="account-nav">
+            <a href='{% url "perfil" %}'>Mi Perfil</a>
+            <a href='{% url "pedidos" %}' class="active">Mis Pedidos</a>
+            <a href='{% url "favoritos" %}'>Mis Favoritos</a>
+        </nav>
+
+        <div class="edit-profile-content">
+            <h1>717</h1>
+            <h2>EDITAR PERFIL</h2>
+            
+            <form class="edit-form">
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" value="Juan Pérez" required>
+                    <button type="button" class="editar">EDITAR</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" value="juan@example.com" required>
+                    <button type="button" class="editar">EDITAR</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="direccion">Dirección</label>
+                    <input type="text" id="direccion" value="Calle 123 #45-67" required>
+                    <button type="button" class="editar">EDITAR</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="facturacion">Información de facturación</label>
+                    <input type="text" id="facturacion" value="**** **** **** 1234" required>
+                    <button type="button" class="editar">EDITAR</button>
+                </div>
+
+                <button type="submit" class="guardar">Guardar Cambios</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="../script.js"></script>
+    <script>
+        lucide.createIcons();
+        
+        document.querySelector('.edit-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Saving changes...');
+        });
+    </script>
+</body>
+</html>
+

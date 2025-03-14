@@ -1,0 +1,197 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Checkout - 717 Tienda Online</title>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../static/img/717logo.png" alt="Logo" width="50" height="50">
+        </div>
+    </header>
+    <a href='{% url "inicio" %}' class="back-button">
+        <i data-lucide="arrow-left"></i> Volver
+    </a>
+    <main class="checkout-container">
+        <h1>717</h1>
+        
+        <div class="checkout-grid">
+            <div class="order-summary">
+                <h2><i data-lucide="shopping-bag"></i> Compra</h2>
+                <div class="summary-content">
+                    <div id="product-list" class="product-list">
+                        <!-- Cart items will be dynamically inserted here -->
+                    </div>
+
+                    <div class="price-summary">
+                        <div class="subtotal">
+                            <span>Subtotal</span>
+                            <span id="subtotal">$0</span>
+                        </div>
+                        <div class="promo-code">
+                            <button type="button">Agregar código de promoción</button>
+                        </div>
+                        <div class="shipping">
+                            <span>Envío</span>
+                            <span id="shipping-cost">$10,000</span>
+                            <small>Envío entre (5-7 días hábiles)</small>
+                        </div>
+                        <div class="total">
+                            <span>Total de compra</span>
+                            <span id="total">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-form">
+                <h2>Iniciar Compra</h2>
+                <form id="payment-form">
+                    <div class="form-section">
+                        <h3>Información de envío</h3>
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="nombre" placeholder="Nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <select id="pais" required>
+                                <option value="">País</option>
+                                <option value="CO">Colombia</option>
+                                <option value="MX">México</option>
+                                <option value="AR">Argentina</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="direccion" placeholder="Dirección" required>
+                            <small>Introduce la dirección manualmente</small>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Método de envío</h3>
+                        <div class="shipping-options">
+                            <label class="shipping-option">
+                                <input type="radio" name="shipping" value="standard" checked>
+                                <span class="option-details">
+                                    <span>Envío</span>
+                                    <span>Entre 5 días y 1 día hábiles</span>
+                                    <span class="price">$10,000</span>
+                                </span>
+                            </label>
+                            <label class="shipping-option">
+                                <input type="radio" name="shipping" value="express">
+                                <span class="option-details">
+                                    <span>48 Hrs Después</span>
+                                    <span>Entre 2 días y 1 día hábiles</span>
+                                    <span class="price">$15,000</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Método de pago</h3>
+                        <div class="payment-methods">
+                            <label class="payment-method">
+                                <input type="radio" name="payment" value="card" checked>
+                                <span>Tarjeta</span>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="payment" value="nequi">
+                                <span>Nequi</span>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="payment" value="daviplata">
+                                <span>Daviplata</span>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="payment" value="bancolombia">
+                                <span>Bancolombia</span>
+                            </label>
+                        </div>
+
+                        <div class="card-details">
+                            <div class="form-group">
+                                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="card-expiry" placeholder="MM/YY" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="card-cvc" placeholder="CVC" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <label class="terms-check">
+                            <input type="checkbox" required>
+                            <span>Devoluciones y cambios gratuitos</span>
+                        </label>
+                        <button type="submit" class="pay-button">Pagar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="checkout-footer">
+            <a href='{% url "legal" %}'>Legal</a>
+            <a href='{% url "inicio" %}'>Volver</a>
+            <a href='{% url "contacto" %}'>Contacto</a>
+        </div>
+    </main>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        lucide.createIcons();
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        function renderCartItems() {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+
+            cart.forEach(item => {
+                const productElement = document.createElement('div');
+                productElement.className = 'product-item';
+                productElement.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="product-details">
+                        <h3>${item.name}</h3>
+                        <p class="price">$${item.price.toLocaleString()}</p>
+                        <p>Cantidad: ${item.quantity}</p>
+                    </div>
+                `;
+                productList.appendChild(productElement);
+            });
+
+            updateTotals();
+        }
+        function updateTotals() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shippingCost = 10000;
+            const total = subtotal + shippingCost;
+            document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
+            document.getElementById('shipping-cost').textContent = `$${shippingCost.toLocaleString()}`;
+            document.getElementById('total').textContent = `$${total.toLocaleString()}`;
+        }
+        renderCartItems();
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Processing payment...');
+        });
+    </script>
+</body>
+</html>
+

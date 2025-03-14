@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/productos.css' %}">
+{% endblock %}
+{% block titulo %}Inicio{% endblock %}
+{% block cuerpo %}
+    <main>
+        <div class="slider">
+            <div class="slide-container">
+                <img src=" {% static 'img/Misca_Con_Diseño.jpg' %}" alt="photo 1" class="slide active">
+                <img src="{% static 'img/Misca_Con_Logo.jpg'%}" alt="photo 2" class="slide">
+                <img src="{% static 'img/Misca_Con_Nombre.jpg' %}" alt="photo 3" class="slide">
+            </div>
+            <div class="slider-nav"></div>
+        </div>
+        <h1 class="main-title">VIVE LA CALLE</h1>
+        <h2 class="sub-title">717</h2>
+        <section class="destacados">
+            <h2>DESTACADOS</h2>
+            <div class="featured-layout">
+                <div class="featured-products">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="../static/img/esquina.jpg" alt="ESQUINA">
+                            <div class="product-overlay">
+                                <div class="product-actions">
+                                    <button onclick="toggleFavorite(1)" class="action-btn favorite-btn">
+                                        <i data-lucide="heart"></i>
+                                    </button>
+                                    <button onclick="viewDetails(1)" class="action-btn view-btn">
+                                        <i data-lucide="eye"></i>
+                                    </button>
+                                </div>
+                                <button onclick="addToCart(1)" class="cart-btn">
+                                    Añadir al carrito
+                                </button>
+                            </div>
+                        </div>
+                        <h3>ESQUINA</h3>
+                        <p class="price">$70,000</p>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="../static/img/BIGHIT.jpg" alt="BIG HIT">
+                            <div class="product-overlay">
+                                <div class="product-actions">
+                                    <button onclick="toggleFavorite(2)" class="action-btn favorite-btn">
+                                        <i data-lucide="heart"></i>
+                                    </button>
+                                    <button onclick="viewDetails(2)" class="action-btn view-btn">
+                                        <i data-lucide="eye"></i>
+                                    </button>
+                                </div>
+                                <button onclick="addToCart(2)" class="cart-btn">
+                                    Añadir al carrito
+                                </button>
+                            </div>
+                        </div>
+                        <h3>BIG HIT</h3>
+                        <p class="price">$70,000</p>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="../static/img/esquina.jpg" alt="ESQUINA">
+                            <div class="product-overlay">
+                                <div class="product-actions">
+                                    <button onclick="toggleFavorite(3)" class="action-btn favorite-btn">
+                                        <i data-lucide="heart"></i>
+                                    </button>
+                                    <button onclick="viewDetails(3)" class="action-btn view-btn">
+                                        <i data-lucide="eye"></i>
+                                    </button>
+                                </div>
+                                <button onclick="addToCart(3)" class="cart-btn">
+                                    Añadir al carrito
+                                </button>
+                            </div>
+                        </div>
+                        <h3>ESQUINA</h3>
+                        <p class="price">$70,000</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            
+        </section>
+    </main>
+{% endblock %}
+{% block js %}
+    <script>
+        lucide.createIcons();
+        
+        const products = [
+            { id: 1, name: 'ESQUINA THE BEGINNING', description: 'Una de las primeras camisetas de nuestra colección, representa el inicio de algo grande. Con un diseño único que combina elementos urbanos y un toque de elegancia, esta pieza es perfecta para aquellos que buscan destacar con estilo..', price: 70000, image: '{% static "img/esquina.jpg" %}' },
+            { id: 2, name: 'BIG HIT THE BEGINNING', description: 'Inspirada en las calles y la cultura urbana, esta camiseta representa la esencia de la vida en la ciudad. Su diseño único captura la energía y el espíritu de la calle, perfecta para aquellos que viven y respiran la cultura urbana..', price: 70000, image: '{% static "img/BIGHIT.jpg" %}' },
+            { id: 3, name: 'BLOOD OF CHRIST', description: 'Descripción breve del producto.', price: 55000, oldPrice: 70000, image: '{% static "img/blood.jpg" %}' },
+            { id: 4, name: 'GANGSTA LOVE', description: 'Descripción breve del producto.', price: 55000, oldPrice: 70000, image: '.{% static "img/gangsta_love.jpg" %}' },
+            { id: 5, name: 'OLD PAIN FIRE', description: 'Descripción breve del producto.', price: 55000, oldPrice: 70000, image: '{% static "img/OLDPAIN.jpg" %}' },
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function renderProducts() {
+            const featuredProducts = document.getElementById('featured-products');
+            const offerProducts = document.getElementById('offer-products');
+            
+            featuredProducts.innerHTML = '';
+            offerProducts.innerHTML = '';
+            
+            products.forEach((product, index) => {
+                const productElement = createProductElement(product);
+                
+                if (index < 3) {
+                    featuredProducts.appendChild(productElement);
+                } else {
+                    offerProducts.appendChild(productElement);
+                }
+            });
+        }
+
+        function createProductElement(product) {
+            const isInCart = cart.some(item => item.id === product.id);
+            const productElement = document.createElement('div');
+            productElement.className = 'product-card';
+            productElement.innerHTML = `
+                <div class="product-image">
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="product-overlay">
+                        <div class="product-actions">
+                            <button onclick="toggleFavorite(${product.id})" class="action-btn favorite-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            </button>
+                            <button onclick="viewDetails(${product.id})" class="action-btn view-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
+                        <button onclick="${isInCart ? `removeFromCart(${product.id})` : `addToCart(${product.id})`}" class="cart-btn">
+                            ${isInCart ? 'Eliminar del carrito' : 'Añadir al carrito'}
+                        </button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <p class="price">$${product.price.toLocaleString()}${product.oldPrice ? ` <span class="old-price">$${product.oldPrice.toLocaleString()}</span>` : ''}</p>
+                </div>
+            `;
+            return productElement;
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                const existingItem = cart.find(item => item.id === productId);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({ ...product, quantity: 1 });
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderProducts();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderProducts();
+        }
+
+        function toggleFavorite(productId) {
+            const favorites = JSON.parse(localStorage.getItem('{% url "favoritos" %}')) || [];
+            const index = favorites.indexOf(productId);
+            
+            if (index === -1) {
+                favorites.push(productId);
+            } else {
+                favorites.splice(index, 1);
+            }
+            
+            localStorage.setItem('{% url "favoritos" %}', JSON.stringify(favorites));
+        }
+
+        function viewDetails(productId) {
+            window.location.href = `{% url "detalles" %}?id=${productId}`;
+        }
+
+        // Initial render
+        renderProducts();
+    </script>
+{% endblock %}
+</body>
+
+</html>

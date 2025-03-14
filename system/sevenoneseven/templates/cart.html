@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+{% block titulo %}Inicio{% endblock %}
+{% block cuerpo %}
+    <main class="container">
+        <h1>Carrito</h1>
+        <div id="cart-items">
+        </div>
+        <div id="cart-summary">
+            <p>Subtotal: <span id="subtotal">$0.00</span></p>
+            <p>Total de compra: <span id="total">$0.00</span></p>
+            <button id="checkout-btn"><a href='{% url "checkout" %}'>Proceder al pago</a></button>
+        </div>
+    </main>
+{% endblock %}
+{% block js %}
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        lucide.createIcons();
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function renderCart() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div>
+                        <h3>${item.name}</h3>
+                        <p>$${item.price.toLocaleString()}</p>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button onclick="updateQuantity(${item.id}, false)">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateQuantity(${item.id}, true)">+</button>
+                    </div>
+                    <div class="cart-item-actions">
+                        <button onclick="viewDetails(${item.id})">Ver detalles</button>
+                        <button onclick="removeFromCart(${item.id})">Eliminar</button>
+                    </div>
+                `;
+                cartItems.appendChild(itemElement);
+            });
+            updateTotal();
+        }
+
+        function updateQuantity(id, increment) {
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                item.quantity = increment ? item.quantity + 1 : Math.max(1, item.quantity - 1);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCart();
+            }
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function viewDetails(id) {
+            console.log(`Viewing details for product ${id}`);
+        }
+
+        function updateTotal() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
+            document.getElementById('total').textContent = `$${subtotal.toLocaleString()}`;
+        }
+
+        document.getElementById('checkout-btn').addEventListener('click', function(e) {
+            if (!isLoggedIn()) {
+                e.preventDefault();
+                alert('Por favor, inicia sesión para continuar con la compra.');
+                window.location.href = '{% url "login" %}';
+            }
+        });
+
+        renderCart();
+    </script>
+{% endblock %}
+
+</body>
+</html>
+
