@@ -21,10 +21,28 @@
     <script>
         lucide.createIcons();
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        // Asegurarse de que cada item tenga una propiedad quantity
+        cart = cart.map(item => {
+            if (!item.hasOwnProperty('quantity')) {
+                item.quantity = 1;
+            }
+            return item;
+        });
+        
+        // Guardar el carrito actualizado
+        localStorage.setItem('cart', JSON.stringify(cart));
 
         function renderCart() {
             const cartItems = document.getElementById('cart-items');
             cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>No hay productos en el carrito</p>';
+                updateTotal();
+                return;
+            }
+            
             cart.forEach(item => {
                 const itemElement = document.createElement('div');
                 itemElement.className = 'cart-item';
@@ -33,15 +51,16 @@
                     <div>
                         <h3>${item.name}</h3>
                         <p>$${item.price.toLocaleString()}</p>
+                        <p>Talla: ${item.size || 'N/A'}</p>
                     </div>
                     <div class="cart-item-quantity">
-                        <button onclick="updateQuantity(${item.id}, false)">-</button>
+                        <button onclick="updateQuantity('${item.id}', false)">-</button>
                         <span>${item.quantity}</span>
-                        <button onclick="updateQuantity(${item.id}, true)">+</button>
+                        <button onclick="updateQuantity('${item.id}', true)">+</button>
                     </div>
                     <div class="cart-item-actions">
-                        <button onclick="viewDetails(${item.id})">Ver detalles</button>
-                        <button onclick="removeFromCart(${item.id})">Eliminar</button>
+                        <button id="detalles" onclick="viewDetails('${item.id}')">Ver detalles</button>
+                        <button onclick="removeFromCart('${item.id}')">Eliminar</button>
                     </div>
                 `;
                 cartItems.appendChild(itemElement);
@@ -50,28 +69,51 @@
         }
 
         function updateQuantity(id, increment) {
-            const item = cart.find(item => item.id === id);
-            if (item) {
-                item.quantity = increment ? item.quantity + 1 : Math.max(1, item.quantity - 1);
-                localStorage.setItem('cart', JSON.stringify(cart));
-                renderCart();
+        // Convertir id a string para comparación consistente
+        const itemIndex = cart.findIndex((item) => String(item.id) === String(id))
+        if (itemIndex !== -1) {
+            if (increment) {
+            // Si es incremento, aumentamos la cantidad en 1
+            cart[itemIndex].quantity = (cart[itemIndex].quantity || 1) + 1
+            } else {
+            // Si es decremento y la cantidad es 1, eliminamos el producto
+            if (cart[itemIndex].quantity <= 1) {
+                removeFromCart(id)
+                return // Salimos de la función para evitar actualizar el mismo item
+            } else {
+                // Si la cantidad es mayor a 1, simplemente decrementamos
+                cart[itemIndex].quantity -= 1
             }
+            }
+            localStorage.setItem("cart", JSON.stringify(cart))
+            renderCart()
+        }
         }
 
+
+
         function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
+            // Convertir id a string para comparación consistente
+            cart = cart.filter(item => String(item.id) !== String(id));
             localStorage.setItem('cart', JSON.stringify(cart));
             renderCart();
         }
 
         function viewDetails(id) {
-            console.log(`Viewing details for product ${id}`);
+            // Redirigir a la página de detalles con el ID del producto
+            window.location.href = '{% url "detalles" %}?id=' + id;
         }
 
         function updateTotal() {
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
             document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
             document.getElementById('total').textContent = `$${subtotal.toLocaleString()}`;
+        }
+
+        function isLoggedIn() {
+            // Esta función debe verificar si el usuario ha iniciado sesión
+            // Por ahora, retornamos true para evitar errores
+            return true; // Reemplaza esto con tu lógica real de verificación
         }
 
         document.getElementById('checkout-btn').addEventListener('click', function(e) {
@@ -86,6 +128,4 @@
     </script>
 {% endblock %}
 
-</body>
-</html>
 

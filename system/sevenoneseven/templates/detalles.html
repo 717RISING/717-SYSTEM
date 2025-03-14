@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/detalles.css' %}">
     <script src="https://unpkg.com/lucide@latest"></script>
     <title>Detalles del Producto - 717 Tienda Online</title>
@@ -49,6 +49,7 @@
                 <button class="add-to-cart">Agregar a la bolsa</button>
 
                 <div class="product-description" id="productDescription">
+                    
 
                 </div>
             </div>
@@ -89,23 +90,17 @@
 
     <script>
         lucide.createIcons();
-        const products = {
-            'big-hit': {
-                name: 'BIG HIT THE BEGINNING',
-                price: 70000,
-                image: '{% static "img/BIGHIT.jpg" %}',
-                description: 'Una de las primeras camisetas de nuestra colección, representa el inicio de algo grande. Con un diseño único que combina elementos urbanos y un toque de elegancia, esta pieza es perfecta para aquellos que buscan destacar con estilo.'
-            },
-            'esquina': {
-                name: 'ESQUINA THE BEGINNING',
-                price: 70000,
-                image: '{% static "img/esquina.jpg" %}',
-                description: 'Inspirada en las calles y la cultura urbana, esta camiseta representa la esencia de la vida en la ciudad. Su diseño único captura la energía y el espíritu de la calle, perfecta para aquellos que viven y respiran la cultura urbana.'
-            }
-        };
+        const products = [
+            { id: 1, name: 'ESQUINA THE BEGINNING', description: 'Una de las primeras camisetas de nuestra colección, representa el inicio de algo grande. Con un diseño único que combina elementos urbanos y un toque de elegancia, esta pieza es perfecta para aquellos que buscan destacar con estilo..', price: 70000, image: '../static/img/esquina.jpg' },
+            { id: 2, name: 'BIG HIT THE BEGINNING', description: 'Inspirada en las calles y la cultura urbana, esta camiseta representa la esencia de la vida en la ciudad. Su diseño único captura la energía y el espíritu de la calle, perfecta para aquellos que viven y respiran la cultura urbana..', price: 70000, image: '../static/img/BIGHIT.jpg' },
+            { id: 3, name: 'BLOOD OF CHRIST', description: 'Descripción breve del producto.', price: 55000, oldPrice: 70000, image: '../static/img/blood.jpg' },
+            { id: 4, name: 'GANGSTA LOVE', description: 'Descripción breve del producto.', price: 55000, oldPrice: 70000, image: '../static/img/gangsta_love.jpg' },
+            { id: 5, name: 'OLD PAIN FIRE', description: 'Descripción breve del producto.', price: 55000, oldPrice: 70000, image: '../static/img/OLDPAIN.jpg' },
+        ];
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
-        const product = products[productId];
+        // Buscar el producto por su ID en lugar de usar el ID como índice
+        const product = products.find(p => p.id == productId);
         if (product) {
             document.getElementById('productName').textContent = product.name;
             document.getElementById('productPrice').textContent = `$${product.price.toLocaleString()}`;
@@ -135,6 +130,7 @@
                 price: product.price,
                 size: selectedSize.dataset.size,
                 image: product.image
+                
             });
             localStorage.setItem('cart', JSON.stringify(cart));
             alert('Producto agregado al carrito');
