@@ -12,7 +12,7 @@
         <div id="cart-summary">
             <p>Subtotal: <span id="subtotal">$0.00</span></p>
             <p>Total de compra: <span id="total">$0.00</span></p>
-            <button id="checkout-btn"><a href='{% url "checkout" %}'>Proceder al pago</a></button>
+            <button id="checkout-btn" onclick= "location.href= `{% url 'checkout' %}` ; " type="button" class="btn btn-info">Proceder al pago</button>
         </div>
     </main>
 {% endblock %}

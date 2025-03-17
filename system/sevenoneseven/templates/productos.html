@@ -1,31 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="vieproductos" name="productos" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="{% static 'img/717logo.png' %}" type="image/x-icon">
-    <title>Productos - 717 Tienda Online</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/productos.css'%}">
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body>
-    <header>
-        <div class="logo">
-            <img src="{% static 'img/717logo.png'%}" alt="Logo" width="70" height="70">
-        </div>
-        <nav>
-            <ul>
-                <li><a href='{% url "inicio" %}'>INICIO</a></li>
-                <li><a href='{% url "productos" %}'>PRODUCTOS</a></li>
-                <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
-                <li><a href='{% url "login" %}'>INICIO DE SESIÓN</a></li>
-                <li><a href='{% url "cart" %}'><i data-lucide="shopping-cart"></i></a></li>
-            </ul>
-        </nav>
-    </header>
-
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/productos.css'%}">
+{% endblock %}
+{% block titulo %}Productos{% endblock %}
+{% block cuerpo %}
     <main class="container">
         <section id="productos" class="productos">
             <h2>Nuestros Productos</h2>
@@ -33,40 +12,8 @@
             </div>
         </section>
     </main>
-
-    <footer>
-        <div class="footer-grid container">
-            <div>
-                <h3>SÍGUENOS</h3>
-                <div class="social-icons">
-                    <a href="#"><i data-lucide="instagram"></i></a>
-                    <a href="#"><i data-lucide="facebook"></i></a>
-                    <a href="#"><i data-lucide="twitter"></i></a>
-                </div>
-            </div>
-            <div>
-                <h3>CATEGORÍAS</h3>
-                <ul>
-                    <li><a href='{% url "inicio" %}'>INICIO</a></li>
-                    <li><a href='{% url "productos" %}'>PRODUCTO</a></li>
-                    <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3>NAVEGACIÓN</h3>
-                <ul>
-                    <li><a href='{% url "inicio" %}'>INICIO</a></li>
-                    <li><a href='{% url "productos" %}'>PRODUCTO</a></li>
-                    <li><a href='{% url "contacto" %}'>CONTACTO</a></li>
-                    <li><a href='{% url "legal" %}'>LEGAL</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-logo">
-            <img src="{% static 'img/717logo.png'%}" alt="717 Logo" width="60" height="60">
-        </div>
-    </footer>
-
+{% endblock %}
+{% block js %}
     <script>
         lucide.createIcons();
         
@@ -81,16 +28,15 @@
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         function renderProducts() {
-            const productGrid = document.getElementById('product-grid');
-            productGrid.innerHTML = '';
-            
+        const productGrid = document.getElementById('product-grid');
+        productGrid.innerHTML = '';
+        
             products.forEach(product => {
-                const isInCart = cart.some(item => item.id === product.id);
                 const productElement = document.createElement('div');   
                 productElement.className = 'product-card';
                 productElement.innerHTML = `
                     <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}">
+                        <img src="${product.image}" alt="${product.name}">|
                         <div class="product-overlay">
                             <div class="product-actions">
                                 <button onclick="toggleFavorite(${product.id})" class="action-btn favorite-btn">
@@ -100,8 +46,8 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                 </button>
                             </div>
-                            <button onclick="${isInCart ? `removeFromCart(${product.id})` : `addToCart(${product.id})`}" class="cart-btn">
-                                ${isInCart ? 'Eliminar del carrito' : 'Añadir al carrito'}
+                            <button onclick="addToCart(${product.id})" class="cart-btn">
+                                Añadir al carrito
                             </button>
                         </div>
                     </div>
@@ -154,5 +100,4 @@
         // Initial render
         renderProducts();
     </script>
-</body>
-</html>
+{% endblock %}

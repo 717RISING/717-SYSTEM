@@ -38,9 +38,25 @@
                     <input type="password" id="password" required>
                     <a href="#" class="forgot-password" id="forgot-password">¿Olvidaste tu contraseña?</a>
                 </div>
-                <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
+
+                <label>CAPTCHA:</label>
+                 <img src="{% static 'captchas/' %}" alt="CAPTCHA">
+                <input type="text" name="captcha" class="form-control" required>
+
                 <button type="submit">INICIAR SESIÓN</button>
+
+
+                
+                
             </form>
+
+                        {% if error_message %}
+                <p style="color: red;">{{ error_message }}</p>
+            {% endif %}
+
+            <!-- Botón para regenerar el CAPTCHA -->
+            <a href="{% url 'login' %}">No entiendo el CAPTCHA, generar otro</a>
+
 
             <div class="google-login">
                 <div id="g_id_onload"

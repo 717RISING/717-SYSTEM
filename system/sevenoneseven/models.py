@@ -1,5 +1,7 @@
 from django.db import models
 
+
+
 # Create your models here.
 class Usuario(models.Model):
     cedula = models.CharField(max_length=12)
@@ -74,4 +76,4 @@ class DetalleCompras(models.Model):
     precioProducto = models.ForeignKey(Producto, on_delete=models.DO_NOTHING)
     cantidad = models.IntegerField()
     subtotal = models.IntegerField()
-    
+  
